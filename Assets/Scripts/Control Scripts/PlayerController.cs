@@ -1,11 +1,16 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private SurviceHub hub;
+    private GameStateManager stateManager;
     //player parts
     private Rigidbody rb;
     private Collider col;
+
+
     //movement
 
     [SerializeField] private Vector2 MoveDirection;
@@ -25,6 +30,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        stateManager = hub.stateManager;
         airJumps = maxAirJumps;
         baseMaxJumps = maxAirJumps;
         baseSpeed = speed;
@@ -54,6 +60,10 @@ public class PlayerController : MonoBehaviour
         
 
         
+    }
+    public void OnPause()
+    {
+        stateManager.OnPause();
     }
     public void OnMove(InputAction.CallbackContext Context)
     {
@@ -91,6 +101,7 @@ public class PlayerController : MonoBehaviour
         
         
         move = new Vector3(MoveDirection.x, PlayerFall.y, MoveDirection.y);
+        move = Quaternion.Euler(0, transform.eulerAngles.y, 0) * move;
         if (doNothingOnStart)
         {
             MoveDirection.y = 0;
