@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
-    public GameObject extraCam;
+    
     public void Quit()
     {
         Application.Quit();
