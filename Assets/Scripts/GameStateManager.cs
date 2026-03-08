@@ -1,16 +1,18 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameStateManager : MonoBehaviour
 {
-    
+    public GameState staringState;
     public void Quit()
     {
         Application.Quit();
+        
     }
     public enum GameState
     {
 
-        MainMenu,
+        Menu,
         Paused,
         GamePlay,
         
@@ -20,13 +22,16 @@ public class GameStateManager : MonoBehaviour
 
     }
     [SerializeField] private SurviceHub hub;
-    private UIManager UI;
+    [SerializeField] private UIManager UI;
     public GameState currentState { get; private set; }
     public GameState lastState { get; private set; }
+    private string currentStateLog;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         UI = hub.uIManager;
+        SetState(staringState);
+        currentStateLog = currentState.ToString();
     }
 
     public void SetState(GameState state)
@@ -34,6 +39,7 @@ public class GameStateManager : MonoBehaviour
         if (currentState == state) return;
         lastState = currentState;
         currentState = state;
+        currentStateLog = currentState.ToString();
         OnStateChange(currentState);
 
 
@@ -43,9 +49,9 @@ public class GameStateManager : MonoBehaviour
     {
         switch (newState)
         {
-            case GameState.MainMenu:
+            case GameState.Menu:
 
-                UI.ShowMainMenu();
+                UI.ShowMenu();
 
 
 
@@ -101,9 +107,9 @@ public class GameStateManager : MonoBehaviour
     }
     public void ReturnToMainMenu()
     {
-        SetState(GameState.MainMenu);
+        SetState(GameState.Menu);
     }
-    public void StartGame()
+    public void GamePlay()
     {
         SetState(GameState.GamePlay);
     }

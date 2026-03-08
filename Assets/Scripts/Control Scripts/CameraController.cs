@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    [SerializeField] private SurviceHub hub;
+    [SerializeField] private GameStateManager stateManager;
+
     private Camera cam;
     private float pitch = 0;
     private float yaw = 0;
@@ -11,22 +14,27 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         cam = GetComponentInChildren<Camera>();
+        stateManager = hub.stateManager;
     }
     void Update()
     {
-        pitch += Input.GetAxis("Mouse Y") * turnspeed;
-        if (pitch < pitchMin)
+        if (stateManager.currentState == GameStateManager.GameState.GamePlay)
         {
-            pitch = pitchMin;
-        }
-        if (pitch > pitchMax)
-        {
-            pitch = pitchMax;
-        }
+            pitch += Input.GetAxis("Mouse Y") * turnspeed;
+            if (pitch < pitchMin)
+            {
+                pitch = pitchMin;
+            }
+            if (pitch > pitchMax)
+            {
+                pitch = pitchMax;
+            }
 
-        yaw += Input.GetAxis("Mouse X") * turnspeed;
+            yaw += Input.GetAxis("Mouse X") * turnspeed;
 
-        cam.transform.rotation = Quaternion.Euler(-pitch, yaw, 0);
-        transform.rotation = Quaternion.Euler(0, yaw, 0);
+            cam.transform.rotation = Quaternion.Euler(-pitch, yaw, 0);
+            transform.rotation = Quaternion.Euler(0, yaw, 0);
+        }
+        
     }
 }

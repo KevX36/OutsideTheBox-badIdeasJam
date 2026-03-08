@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private SurviceHub hub;
-    private GameStateManager stateManager;
+    [SerializeField] private GameStateManager stateManager;
     //player parts
     private Rigidbody rb;
     private Collider col;
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     
     private bool doNothingOnStart = true;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         stateManager = hub.stateManager;
         airJumps = maxAirJumps;
@@ -41,21 +41,24 @@ public class PlayerController : MonoBehaviour
     }
     public void OnJump(InputAction.CallbackContext context)
     {
-        InputAction input = context.action;
-        Debug.Log("started jump");
-        if (input.IsPressed())
+        if(stateManager.currentState == GameStateManager.GameState.GamePlay)
         {
-            if (isGrounded)
+            InputAction input = context.action;
+            Debug.Log("started jump");
+            if (input.IsPressed())
             {
-                Jumping = true;
+                if (isGrounded)
+                {
+                    Jumping = true;
+                }
+                else if (airJumps > 0)
+                {
+                    Jumping = true;
+                    airJumps--;
+                }
+
+
             }
-            else if (airJumps > 0)
-            {
-                Jumping = true;
-                airJumps--;
-            }
-                
-            
         }
         
 
@@ -67,8 +70,12 @@ public class PlayerController : MonoBehaviour
     }
     public void OnMove(InputAction.CallbackContext Context)
     {
-        Debug.Log("moving");
-        MoveDirection = Context.ReadValue<Vector2>();
+        if (stateManager.currentState == GameStateManager.GameState.GamePlay)
+        {
+            Debug.Log("moving");
+            MoveDirection = Context.ReadValue<Vector2>();
+        }
+        
     }
     public bool cheakIfGrounded()
     {
@@ -76,39 +83,47 @@ public class PlayerController : MonoBehaviour
 
         
     }
+    public void ResetEffects()
+    {
+        speed = baseSpeed;
+        maxAirJumps = baseMaxJumps;
+    }
     void Update()
     {
+        if(stateManager.currentState == GameStateManager.GameState.GamePlay)
+        {
+            isGrounded = cheakIfGrounded();
+            if (isGrounded)
+            {
+                airJumps = maxAirJumps;
+
+
+            }
+            if (PlayerFall.y > 0)
+            {
+                PlayerFall += Physics.gravity * Time.deltaTime;
+            }
+            if (Jumping)
+            {
+                PlayerFall.y = JumpHighet;
+
+
+                Debug.Log("Jumped");
+                Jumping = false;
+            }
+
+
+            move = new Vector3(MoveDirection.x, PlayerFall.y, MoveDirection.y);
+            move = Quaternion.Euler(0, transform.eulerAngles.y, 0) * move;
+            if (doNothingOnStart)
+            {
+                MoveDirection.y = 0;
+                move.z = 0;
+                doNothingOnStart = false;
+            }
+            rb.MovePosition(rb.position + move * speed * Time.deltaTime);
+        }
         
-        isGrounded = cheakIfGrounded();
-        if (isGrounded)
-        {
-            airJumps = maxAirJumps;
-            
-            
-        }
-        if (PlayerFall.y > 0)
-        {
-            PlayerFall += Physics.gravity * Time.deltaTime;
-        }
-        if (Jumping)
-        {
-            PlayerFall.y = JumpHighet;
-            
-            
-            Debug.Log("Jumped");
-            Jumping = false;
-        }
-        
-        
-        move = new Vector3(MoveDirection.x, PlayerFall.y, MoveDirection.y);
-        move = Quaternion.Euler(0, transform.eulerAngles.y, 0) * move;
-        if (doNothingOnStart)
-        {
-            MoveDirection.y = 0;
-            move.z = 0;
-            doNothingOnStart = false;
-        }
-        rb.MovePosition(rb.position + move*speed*Time.deltaTime);
         
         
         

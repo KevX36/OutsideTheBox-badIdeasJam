@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SurviceHub : MonoBehaviour
@@ -6,5 +7,6 @@ public class SurviceHub : MonoBehaviour
     [SerializeField] public LevelManager levelManager;
     [SerializeField] public GameStateManager stateManager;
     [SerializeField] public GameObject player;
+    
 
 }
