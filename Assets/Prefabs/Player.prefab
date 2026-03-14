@@ -120,8 +120,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8585282867423114479}
   - {fileID: 6075643630223527897}
+  - {fileID: 8585282867423114479}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2916330537718187131
@@ -181,6 +181,38 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 90823892-7c4d-42fd-aa83-87f91105101b
     m_ActionName: 'PlayerControls/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9095939386206617586}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnPause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7e97d5d5-287a-47c1-91dd-ef6a3450bb2e
+    m_ActionName: 'PlayerControls/Pause[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9095939386206617586}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: GrabAndThrow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 43806046-f15c-4c55-9898-fd7a0159b3f9
+    m_ActionName: 'PlayerControls/Pickup/toss[/Mouse/leftButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: PlayerControls
@@ -198,6 +230,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08c4971c682de84c9e296010ccb5654, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hub: {fileID: 0}
+  stateManager: {fileID: 0}
+  cam: {fileID: 0}
   MoveDirection: {x: 0, y: 0}
   speed: 5
   move: {x: 0, y: 0, z: 0}
@@ -206,6 +241,10 @@ MonoBehaviour:
   maxAirJumps: 0
   JumpHighet: 3
   isGrounded: 1
+  GrabSpot: {fileID: 4025490149971864553}
+  holdingBox: 0
+  box: {fileID: 0}
+  GrabRange: 5
 --- !u!114 &726709715587870145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +257,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6361e928d5ed44749ad3d41e53311569, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cam: {fileID: 3199088643586343109}
+  hub: {fileID: 0}
+  stateManager: {fileID: 0}
   pitchMax: 60
   pitchMin: -60
   turnspeed: 2
@@ -303,7 +343,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.52, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8738632209129364708}
   m_Father: {fileID: 7139672960007821504}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &1055338689765821579
@@ -409,3 +450,34 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &4025490149971864553
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8738632209129364708}
+  m_Layer: 0
+  m_Name: Grab Spot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8738632209129364708
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4025490149971864553}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.81, z: 0.8770001}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6075643630223527897}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

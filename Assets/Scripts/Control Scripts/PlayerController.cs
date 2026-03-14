@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -9,7 +10,7 @@ public class PlayerController : MonoBehaviour
     //player parts
     private Rigidbody rb;
     private Collider col;
-
+    [SerializeField] private Camera cam;
 
     //movement
 
@@ -25,7 +26,15 @@ public class PlayerController : MonoBehaviour
     public int JumpHighet = 7;
     private bool Jumping = false;
     [SerializeField]private bool isGrounded = true;
-    
+    // box
+    public GameObject GrabSpot;
+
+    [SerializeField] private Rigidbody box;
+    public float GrabRange = 5;
+
+
+
+
     private bool doNothingOnStart = true;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -36,7 +45,7 @@ public class PlayerController : MonoBehaviour
         baseSpeed = speed;
         col = this.GetComponent<Collider>();
         rb = this.GetComponent<Rigidbody>();
-        
+        cam = GetComponentInChildren<Camera>();
         MoveDirection = rb.position;
     }
     public void OnJump(InputAction.CallbackContext context)
@@ -68,6 +77,43 @@ public class PlayerController : MonoBehaviour
     {
         stateManager.OnPause();
     }
+    public void GrabAndThrow()
+    {
+        RaycastHit hit;
+        if (box == null && Physics.Raycast(cam.transform.position, (cam.transform.forward * GrabRange) + cam.transform.position, out hit))
+        {
+            box = hit.rigidbody;
+            if (box.gameObject.CompareTag("Box"))
+            {
+
+            }
+            else
+            {
+                box = null;
+            }
+
+            
+        }
+        else if (box != null)
+        {
+            Debug.Log("toss the box");
+            box.AddForce(cam.transform.forward);
+            box = null;
+            box = null;
+        }
+
+
+
+    }
+    public void cutBox()
+    {
+        Debug.Log("tried to cut box");
+        if (box != null)
+        {
+
+        }
+        
+    }
     public void OnMove(InputAction.CallbackContext Context)
     {
         if (stateManager.currentState == GameStateManager.GameState.GamePlay)
@@ -90,7 +136,8 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        if(stateManager.currentState == GameStateManager.GameState.GamePlay)
+        Debug.DrawLine(cam.transform.position, (cam.transform.forward * GrabRange) + cam.transform.position, Color.red);
+        if (stateManager.currentState == GameStateManager.GameState.GamePlay)
         {
             isGrounded = cheakIfGrounded();
             if (isGrounded)
@@ -110,6 +157,13 @@ public class PlayerController : MonoBehaviour
 
                 Debug.Log("Jumped");
                 Jumping = false;
+            }
+
+
+            if (box != null)
+            {
+
+                box.position = GrabSpot.transform.position;
             }
 
 
