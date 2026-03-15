@@ -19,17 +19,20 @@ public class PlayerController : MonoBehaviour
     private int baseSpeed;
     [SerializeField] private Vector3 move;
     //jump
-    [SerializeField] Vector3 PlayerFall = new Vector3 (0,0,0);
+    [SerializeField] Vector3 PlayerFall = new Vector3(0, 0, 0);
     public int airJumps = 1;
     public int maxAirJumps = 1;
     private int baseMaxJumps;
     public int JumpHighet = 7;
     private bool Jumping = false;
-    [SerializeField]private bool isGrounded = true;
+    [SerializeField] private bool isGrounded = true;
     // box
     public GameObject GrabSpot;
 
-    [SerializeField] private Rigidbody box;
+    [SerializeField] private GameObject boxGO;
+    [SerializeField] private Rigidbody boxRB;
+    [SerializeField] private Box boxOpen;
+    
     public float GrabRange = 5;
 
 
@@ -80,26 +83,36 @@ public class PlayerController : MonoBehaviour
     public void GrabAndThrow()
     {
         RaycastHit hit;
-        if (box == null && Physics.Raycast(cam.transform.position, (cam.transform.forward * GrabRange) + cam.transform.position, out hit))
+        if (boxGO == null && Physics.Raycast(cam.transform.position, (cam.transform.forward * GrabRange) + cam.transform.position, out hit))
         {
-            box = hit.rigidbody;
-            if (box.gameObject.CompareTag("Box"))
+            Debug.Log("Tried To pick up box");
+            boxGO = hit.transform.gameObject;
+            if (boxGO.TryGetComponent<Box>(out Box box))
             {
-
+                Debug.Log("Grabed box");
+                boxRB = boxGO.GetComponent<Rigidbody>();
+                boxGO.GetComponent<BoxCollider>().enabled = false;
+                boxRB.constraints = RigidbodyConstraints.FreezeAll;
+                boxOpen = box;
+                
             }
             else
             {
-                box = null;
-            }
+                Debug.Log("tried to grab something that was not a box");
+                boxGO = null;
 
+            }
+            
             
         }
-        else if (box != null)
+        else if (boxGO != null)
         {
             Debug.Log("toss the box");
-            box.AddForce(cam.transform.forward);
-            box = null;
-            box = null;
+            boxGO.GetComponent<BoxCollider>().enabled = true;
+            boxRB.constraints = RigidbodyConstraints.None;
+            boxRB.AddForce(cam.transform.forward);
+            boxGO = null;
+            boxRB = null;
         }
 
 
@@ -108,7 +121,7 @@ public class PlayerController : MonoBehaviour
     public void cutBox()
     {
         Debug.Log("tried to cut box");
-        if (box != null)
+        if (boxGO != null)
         {
 
         }
@@ -160,10 +173,10 @@ public class PlayerController : MonoBehaviour
             }
 
 
-            if (box != null)
+            if (boxGO != null)
             {
 
-                box.position = GrabSpot.transform.position;
+                boxRB.position = GrabSpot.transform.position;
             }
 
 

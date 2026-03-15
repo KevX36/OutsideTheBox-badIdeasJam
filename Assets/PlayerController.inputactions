@@ -219,6 +219,17 @@
                     "action": "Pickup/toss",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "71cc05c8-bdda-45ca-9455-8e9aa3436fe8",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pickup/toss",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

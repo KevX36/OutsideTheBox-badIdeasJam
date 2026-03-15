@@ -1506,6 +1506,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 6593318983718097739}
     - target: {fileID: 9095939386206617586, guid: 5f2666c0bec90424089087d27a5366e6, type: 3}
+      propertyPath: GrabRange
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9095939386206617586, guid: 5f2666c0bec90424089087d27a5366e6, type: 3}
       propertyPath: stateManager
       value: 
       objectReference: {fileID: 4806577813185452815}
