@@ -1,10 +1,16 @@
 using UnityEngine;
 
-public interface Box
+public interface IBox
 {
+
     void Open()
     {
 
     }
+
+
+
+
+
 }
 

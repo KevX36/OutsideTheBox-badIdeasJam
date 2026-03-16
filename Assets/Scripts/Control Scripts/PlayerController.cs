@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,14 +29,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool isGrounded = true;
     // box
     public GameObject GrabSpot;
-
+    public UnityEngine.UI.Image Center;
+    public int TossPower = 5;
     [SerializeField] private GameObject boxGO;
     [SerializeField] private Rigidbody boxRB;
-    [SerializeField] private Box boxOpen;
+    [SerializeField] private IBox boxOpen;
     
     public float GrabRange = 5;
 
-
+    
 
 
     private bool doNothingOnStart = true;
@@ -80,21 +82,20 @@ public class PlayerController : MonoBehaviour
     {
         stateManager.OnPause();
     }
-    public void GrabAndThrow()
+    public void GrabAndDrop()
     {
         RaycastHit hit;
-        if (boxGO == null && Physics.Raycast(cam.transform.position, (cam.transform.forward * GrabRange) + cam.transform.position, out hit))
+        if (boxGO == null && Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, GrabRange))
         {
             Debug.Log("Tried To pick up box");
             boxGO = hit.transform.gameObject;
-            if (boxGO.TryGetComponent<Box>(out Box box))
+            if (boxGO.CompareTag("PickUp"))
             {
                 Debug.Log("Grabed box");
                 boxRB = boxGO.GetComponent<Rigidbody>();
                 boxGO.GetComponent<BoxCollider>().enabled = false;
                 boxRB.constraints = RigidbodyConstraints.FreezeAll;
-                boxOpen = box;
-                
+                boxOpen = boxGO.GetComponent<IBox>();
             }
             else
             {
@@ -113,10 +114,24 @@ public class PlayerController : MonoBehaviour
             boxRB.AddForce(cam.transform.forward);
             boxGO = null;
             boxRB = null;
+            boxOpen = null;
         }
 
 
 
+    }
+    public void Throw()
+    {
+        if (boxGO != null)
+        {
+            Debug.Log("toss the box");
+            boxGO.GetComponent<BoxCollider>().enabled = true;
+            boxRB.constraints = RigidbodyConstraints.None;
+            boxRB.AddForce((cam.transform.forward * TossPower) + (cam.transform.up* (TossPower / 2)));
+            boxGO = null;
+            boxRB = null;
+            boxOpen = null;
+        }
     }
     public void cutBox()
     {
@@ -171,12 +186,23 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Jumped");
                 Jumping = false;
             }
-
-
+            RaycastHit hit;
+            Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, GrabRange);
+            if (Center.color == new Color (0,0,0, 195) && hit.transform.gameObject.CompareTag("PickUp"))
+            {
+                Center.color = new Color(255, 255, 255, 195);
+                Debug.Log("looked at box");
+            }
+            else if (Center.color == new Color(255, 255, 255, 195) && !hit.transform.gameObject.CompareTag("PickUp"))
+            {
+                Center.color = new Color(0, 0, 0, 195);
+                Debug.Log("looked away from box");
+            }
             if (boxGO != null)
             {
 
-                boxRB.position = GrabSpot.transform.position;
+                boxGO.transform.position = GrabSpot.transform.position;
+                boxGO.transform.rotation = GrabSpot.transform.rotation;
             }
 
 

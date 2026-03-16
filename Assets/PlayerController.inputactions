@@ -34,9 +34,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Pickup/toss",
+                    "name": "Pickup/drop",
                     "type": "Button",
                     "id": "43806046-f15c-4c55-9898-fd7a0159b3f9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Throw",
+                    "type": "Button",
+                    "id": "a228799b-047f-4b4e-92a3-fb029e0abd61",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -205,7 +214,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pickup/toss",
+                    "action": "Pickup/drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -216,7 +225,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pickup/toss",
+                    "action": "Pickup/drop",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -227,7 +236,40 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pickup/toss",
+                    "action": "Pickup/drop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1ad5de13-44d5-449f-aa1f-d14f20d09427",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "00d22734-9e1d-4be5-8363-e6a43450c85f",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throw",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6e26609b-092f-4d7b-a73f-601e8cfce83b",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Throw",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
